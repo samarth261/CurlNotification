@@ -3,7 +3,6 @@ package net.freedynamicdns.samarths.curlnotification;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -42,11 +41,9 @@ public class NotificationServer {
                     Thread t = new ClientHandler(client, _appContext);
                     t.start();
                 } catch (Exception e) {
-                    Log.d("mylog 1", e.getMessage());
                 }
             }
         } catch (Exception e) {
-            Log.d("mylog 2", e.getMessage());
         }
     }
 
@@ -68,7 +65,6 @@ class ClientHandler extends Thread {
             _dis = new DataInputStream(client.getInputStream());
             _dos = new DataOutputStream(client.getOutputStream());
         } catch (Exception e) {
-            Log.d("mylog", e.getMessage());
         }
         _appctx = appctx;
     }
@@ -82,20 +78,16 @@ class ClientHandler extends Thread {
             if (!client_input.startsWith("GET ")) throw new Exception("not get");
             if (!client_input.endsWith(" HTTP/1.1")) throw new Exception("not http/1.1");
             String query = client_input.substring(5, client_input.length()-9);
-            Log.d("mylog query ---> ", query);
 
             int max_lines_ctr = 100;
             while (--max_lines_ctr > 0) {
                 client_input = _dis.readLine();
                 if (client_input == null) {
-                    Log.d("mylog found a null?", client_input);
                     throw new Exception("got a null");
                 }
-                Log.d("mylog", client_input.length() + ">" + client_input);
                 if (client_input.length() == 0) break;
             }
             if (max_lines_ctr == 0) throw new Exception("Max lines reached");
-            Log.d("mylog", "Done. sending response");
 
             _dos.writeBytes("HTTP/1.1 200 OK\n");
             _dos.writeBytes("\r\n");
@@ -114,7 +106,6 @@ class ClientHandler extends Thread {
             NotificationManagerCompat.from(_appctx).notify((int) Math.ceil(100000*Math.random()), my_notification.build());
 
         } catch (Exception e) {
-            Log.d("mylog error", e.getMessage());
         }
     }
 }
