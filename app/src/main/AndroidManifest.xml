@@ -2,13 +2,34 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.freedynamicdns.samarths.curlnotification">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/curlnotificationtransparent"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/curlnotificationtransparent"
         android:supportsRtl="true"
         android:theme="@style/Theme.CurlNotification">
+        <service
+            android:name=".ServerRunnerService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <receiver
+            android:name=".CurlNotificationBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="StartCurlNotification"/>
+                <data android:scheme="package"/>
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
