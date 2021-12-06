@@ -11,21 +11,6 @@ import android.os.Process;
 import android.widget.Toast;
 
 public class ServerRunnerService extends Service {
-    private static Looper serviceLooper = null;
-    private static ServiceHandler serviceHandler = null;
-
-    private final class ServiceHandler extends Handler {
-        public ServiceHandler(Looper looper) {
-            super(looper);
-        }
-        @Override
-        public void handleMessage(Message msg) {
-            Handler uihandle = new Handler(getMainLooper());
-            NotificationServer server = new NotificationServer(uihandle, getApplicationContext());
-            server.StartListening();
-        }
-    }
-
     public ServerRunnerService() {
     }
 
@@ -37,19 +22,20 @@ public class ServerRunnerService extends Service {
 
     @Override
     public void onCreate() {
-        HandlerThread thread = new HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND);
-        thread.start();
-
-        // Get the HandlerThread's Looper and use it for our Handler
-        serviceLooper = thread.getLooper();
-        serviceHandler = new ServiceHandler(serviceLooper);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
-        Message msg = serviceHandler.obtainMessage();
-        msg.arg1 = startId;
-        serviceHandler.sendMessage(msg);
+        HandlerThread thread = new HandlerThread("ServiceStartArguments", Process.THREAD_PRIORITY_BACKGROUND);
+        thread.start();
+        new Handler(thread.getLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Handler uihandle = new Handler(getMainLooper());
+                NotificationServer server = new NotificationServer(uihandle, getApplicationContext());
+                server.StartListening();
+            }
+        });
 
         return Service.START_STICKY;
     }
@@ -58,9 +44,9 @@ public class ServerRunnerService extends Service {
     @Override
     public void onDestroy()
     {
-        super.onDestroy();
-        sendBroadcast(new Intent(this, CurlNotificationBroadcastReceiver.class).setAction(Constants.Actions.START_CURL_NOTIFICATION_SERVICE));
-        Toast.makeText(this, "Sending broadcast to start service again", Toast.LENGTH_LONG).show();
+        // super.onDestroy();
+        // sendBroadcast(new Intent(this, CurlNotificationBroadcastReceiver.class).setAction(Constants.Actions.START_CURL_NOTIFICATION_SERVICE));
+        // Toast.makeText(this, "Sending broadcast to start service again", Toast.LENGTH_LONG).show();
     }
 
 }

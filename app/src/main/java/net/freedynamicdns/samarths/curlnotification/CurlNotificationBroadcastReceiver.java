@@ -14,7 +14,6 @@ public class CurlNotificationBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         context_ = context;
-        Toast.makeText(context, action, Toast.LENGTH_LONG).show();
         Log.d("mylog", "broadcast receiver: " + action);
 
         if (action == Constants.Actions.START_CURL_NOTIFICATION_SERVICE) {
