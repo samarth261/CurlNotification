@@ -26,14 +26,10 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
-      with:
-        arguments: build
     - name: Build the app
       run: ./gradlew assembleDebug
     - name: Upload APK
-      uses: actions/upload-artifcat@v1
+      uses: actions/upload-artifcat@v2
       with:
         name: apk
         path: app/build/outputs/apk/debug/app-debug.apk
