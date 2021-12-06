@@ -11,8 +11,8 @@ import android.os.Process;
 import android.widget.Toast;
 
 public class ServerRunnerService extends Service {
-    private Looper serviceLooper;
-    private ServiceHandler serviceHandler;
+    private static Looper serviceLooper = null;
+    private static ServiceHandler serviceHandler = null;
 
     private final class ServiceHandler extends Handler {
         public ServiceHandler(Looper looper) {
@@ -59,7 +59,7 @@ public class ServerRunnerService extends Service {
     public void onDestroy()
     {
         super.onDestroy();
-        sendBroadcast(new Intent("StartCurlNotification"));
+        sendBroadcast(new Intent(this, CurlNotificationBroadcastReceiver.class).setAction(Constants.Actions.START_CURL_NOTIFICATION_SERVICE));
         Toast.makeText(this, "Sending broadcast to start service again", Toast.LENGTH_LONG).show();
     }
 

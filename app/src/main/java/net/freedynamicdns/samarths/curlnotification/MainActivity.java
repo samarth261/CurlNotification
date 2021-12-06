@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        startService(new Intent(getApplicationContext(), ServerRunnerService.class));
-        ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(new NotificationChannel("main", "main name", NotificationManager.IMPORTANCE_HIGH));
+        //startService(new Intent(getApplicationContext(), ServerRunnerService.class));
+       sendBroadcast(new Intent(this, CurlNotificationBroadcastReceiver.class).setAction("StartCurlNotification"));
     }
 }

@@ -40,6 +40,7 @@ public class NotificationServer {
                     Socket client = server.accept();
                     Thread t = new ClientHandler(client, _appContext);
                     t.start();
+                    //t.stop();
                 } catch (Exception e) {
                 }
             }
@@ -97,13 +98,9 @@ class ClientHandler extends Thread {
 
             String[] nparts = query.split("::");
             if (nparts.length != 2) throw new Exception("Improper length");
-            NotificationCompat.Builder my_notification = new NotificationCompat.Builder(_appctx, "main")
-                    .setSmallIcon(R.drawable.curlnotificationtransparent)
-                    .setLargeIcon(BitmapFactory.decodeResource(_appctx.getResources(), R.drawable.curlnotificationtransparent))
-                    .setContentTitle(nparts[0])
-                    .setContentText(nparts[1])
-                    .setColor(0xff3c9cfc);
-            NotificationManagerCompat.from(_appctx).notify((int) Math.ceil(100000*Math.random()), my_notification.build());
+
+            NotificationManager notificationManager = new NotificationManager(_appctx);
+            notificationManager.createNotification(nparts[0], nparts[1]);
 
         } catch (Exception e) {
         }

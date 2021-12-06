@@ -24,10 +24,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
-            <intent-filter>
-                <action android:name="StartCurlNotification"/>
-                <data android:scheme="package"/>
-            </intent-filter>
         </receiver>
 
         <activity
