@@ -44,9 +44,15 @@ public class ServerRunnerService extends Service {
     @Override
     public void onDestroy()
     {
+        // This is not being called.
+        new Handler(getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getApplicationContext(), "Sending broadcast to start service again", Toast.LENGTH_LONG).show();
+            }
+        });
         // super.onDestroy();
         // sendBroadcast(new Intent(this, CurlNotificationBroadcastReceiver.class).setAction(Constants.Actions.START_CURL_NOTIFICATION_SERVICE));
-        // Toast.makeText(this, "Sending broadcast to start service again", Toast.LENGTH_LONG).show();
     }
 
 }
