@@ -44,7 +44,7 @@ public class ServerRunnerService extends Service {
     @Override
     public void onDestroy()
     {
-        super.onDestroy()
+        super.onDestroy();
         // This is not being called.
         new Handler(getMainLooper()).post(new Runnable() {
             @Override
